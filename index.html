@@ -236,6 +236,7 @@
 
     /* bouquet stage */
     .bouquet-stage {
+      --bloom-drop: 5%;
       position: fixed;
       left: 50%;
       bottom: -16svh;
@@ -310,8 +311,8 @@
       width: 156px;
       height: 156px;
       opacity: 0;
-      transform-origin: center;
-      transform: translate(-50%, -50%) scale(0.2) rotate(var(--r));
+      transform-origin: center bottom;
+      transform: translate(-50%, -100%) scale(0.2) rotate(var(--r));
       filter: drop-shadow(0 18px 28px rgba(120, 76, 48, 0.18));
       transition: none;
     }
@@ -323,17 +324,19 @@
     @keyframes bouquetFlowerIn {
       from {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(0.2) rotate(var(--r));
+        transform: translate(-50%, -100%) scale(0.2) rotate(var(--r));
       }
       to {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(var(--s)) rotate(var(--r));
+        transform: translate(-50%, -100%) scale(var(--s)) rotate(var(--r));
       }
     }
 
+    /* --stem-y = SVG tip; blooms sit lower via --bloom-drop on .bouquet-stage */
     .bq-f1 {
       --x: 50%;
-      --y: 37%;
+      --stem-y: 67.31%;
+      --y: calc(var(--stem-y) + var(--bloom-drop));
       --s: 0.95;
       --r: 0deg;
       --d: 0.28s;
@@ -342,7 +345,8 @@
 
     .bq-f2 {
       --x: 38%;
-      --y: 40%;
+      --stem-y: 64.42%;
+      --y: calc(var(--stem-y) + var(--bloom-drop));
       --s: 0.82;
       --r: -8deg;
       --d: 0.40s;
@@ -351,7 +355,8 @@
 
     .bq-f3 {
       --x: 62%;
-      --y: 40%;
+      --stem-y: 65%;
+      --y: calc(var(--stem-y) + var(--bloom-drop));
       --s: 0.82;
       --r: 8deg;
       --d: 0.46s;
@@ -360,7 +365,8 @@
 
     .bq-f4 {
       --x: 30.5%;
-      --y: 45%;
+      --stem-y: 60.58%;
+      --y: calc(var(--stem-y) + var(--bloom-drop));
       --s: 0.72;
       --r: -14deg;
       --d: 0.56s;
@@ -369,34 +375,16 @@
 
     .bq-f5 {
       --x: 69.5%;
-      --y: 45%;
+      --stem-y: 61.15%;
+      --y: calc(var(--stem-y) + var(--bloom-drop));
       --s: 0.72;
       --r: 14deg;
       --d: 0.62s;
       z-index: 3;
     }
 
+    /* bouquet petal tones — shuffled, not left-to-right */
     .bq-f2 .petal {
-      background: radial-gradient(
-        circle at 35% 28%,
-        var(--flower-cream) 0%,
-        var(--flower-blush) 36%,
-        #ffbcbc 68%,
-        var(--flower-coral) 100%
-      );
-    }
-
-    .bq-f3 .petal {
-      background: radial-gradient(
-        circle at 35% 28%,
-        var(--flower-cream) 0%,
-        var(--flower-pink) 40%,
-        var(--flower-coral) 72%,
-        var(--flower-red) 100%
-      );
-    }
-
-    .bq-f4 .petal {
       background: radial-gradient(
         circle at 35% 28%,
         #fff8ec 0%,
@@ -406,13 +394,33 @@
       );
     }
 
-    .bq-f5 .petal {
+    .bq-f3 .petal {
       background: radial-gradient(
         circle at 35% 28%,
         var(--flower-cream) 0%,
         var(--flower-pink) 34%,
         var(--flower-red) 78%,
         var(--flower-deep-red) 100%
+      );
+    }
+
+    .bq-f4 .petal {
+      background: radial-gradient(
+        circle at 35% 28%,
+        var(--flower-cream) 0%,
+        var(--flower-blush) 36%,
+        #ffbcbc 68%,
+        var(--flower-coral) 100%
+      );
+    }
+
+    .bq-f5 .petal {
+      background: radial-gradient(
+        circle at 35% 28%,
+        var(--flower-cream) 0%,
+        var(--flower-pink) 40%,
+        var(--flower-coral) 72%,
+        var(--flower-red) 100%
       );
     }
 
@@ -595,14 +603,12 @@
   
   <!-- FLOWER -->
   <div class="bouquet-stage" aria-hidden="true">
-    <svg class="bouquet-stems" viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-      <path class="bq-stem" d="M200,520 C200,460 198,400 200,330" fill="none" stroke="#4a8a50" stroke-width="5" stroke-linecap="round"/>
-      <path class="bq-stem" d="M196,520 C190,455 175,385 152,315" fill="none" stroke="#4a8a50" stroke-width="4" stroke-linecap="round"/>
-      <path class="bq-stem" d="M204,520 C210,455 225,385 248,318" fill="none" stroke="#4a8a50" stroke-width="4" stroke-linecap="round"/>
-      <path class="bq-stem" d="M193,520 C183,450 158,370 122,295" fill="none" stroke="#3f7448" stroke-width="3.5" stroke-linecap="round"/>
-      <path class="bq-stem" d="M207,520 C217,450 242,370 278,298" fill="none" stroke="#3f7448" stroke-width="3.5" stroke-linecap="round"/>
-      <path class="bq-stem" d="M190,520 C174,448 138,355 94,278" fill="none" stroke="#567d50" stroke-width="3"/>
-      <path class="bq-stem" d="M210,520 C226,448 262,355 306,281" fill="none" stroke="#567d50" stroke-width="3"/>
+    <svg class="bouquet-stems" viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path class="bq-stem" d="M200,520 C200,478 198,418 200,368 L200,350" fill="none" stroke="#4a8a50" stroke-width="5" stroke-linecap="round"/>
+      <path class="bq-stem" d="M196,520 C190,473 175,403 152,353 L152,335" fill="none" stroke="#4a8a50" stroke-width="4" stroke-linecap="round"/>
+      <path class="bq-stem" d="M204,520 C210,473 225,403 248,356 L248,338" fill="none" stroke="#4a8a50" stroke-width="4" stroke-linecap="round"/>
+      <path class="bq-stem" d="M193,520 C183,468 158,393 122,333 L122,315" fill="none" stroke="#3f7448" stroke-width="3.5" stroke-linecap="round"/>
+      <path class="bq-stem" d="M207,520 C217,468 242,393 278,336 L278,318" fill="none" stroke="#3f7448" stroke-width="3.5" stroke-linecap="round"/>
     </svg>
 
     <div class="flower-head bouquet-flower bq-f1">
